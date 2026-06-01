@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check if user is authenticated admin (not expired)
+    function isAdmin() {
+      let u = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return request.auth != null
+        && u.role in ['admin', 'superadmin']
+        && (u.expiresAt == null || u.expiresAt > request.time);
+    }
+
+    function isSuperAdmin() {
+      let u = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return request.auth != null && u.role == 'superadmin';
+    }
+
+    // Products: public read, admin write
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Users: superadmin full control, admin can read own doc
+    match /users/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isSuperAdmin());
+      allow create: if isSuperAdmin();
+      allow update: if isSuperAdmin();
+      allow delete: if isSuperAdmin();
+    }
+  }
+}

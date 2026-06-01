@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy-950: #070F1A;
+  --navy-900: #0D1B2A;
+  --navy-800: #1A2744;
+  --navy-700: #1E3254;
+  --silver-100: #FFFFFF;
+  --silver-200: #E8F0F8;
+  --silver-300: #C8E4F8;
+  --silver-400: #B8D4E8;
+  --silver-500: #8DAEC8;
+  --glow: #C8DEFF;
+}
+
+@layer base {
+  body {
+    @apply bg-navy-900 text-silver-200;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-silver-300 text-navy-900 font-semibold px-6 py-3 rounded-lg
+           hover:bg-silver-100 transition-all duration-200
+           active:scale-95 inline-flex items-center gap-2;
+    box-shadow: 0 0 20px rgba(200, 222, 255, 0.2);
+  }
+  .btn-outline {
+    @apply border border-silver-400 text-silver-300 px-6 py-3 rounded-lg
+           hover:bg-navy-800 hover:border-silver-300 transition-all duration-200
+           active:scale-95 inline-flex items-center gap-2;
+  }
+  .card {
+    @apply bg-navy-800 border border-navy-700 rounded-2xl
+           hover:border-silver-500 transition-all duration-300;
+    box-shadow: 0 4px 24px rgba(7, 15, 26, 0.6);
+  }
+  .input {
+    @apply bg-navy-800 border border-navy-700 text-silver-200 rounded-lg
+           px-4 py-3 w-full outline-none
+           focus:border-silver-400
+           placeholder:text-silver-500 transition-colors duration-200;
+  }
+  .label {
+    @apply text-silver-400 text-sm font-medium mb-1 block;
+  }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #070F1A; }
+::-webkit-scrollbar-thumb { background: #1E3254; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #8DAEC8; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, #B8D4E8 0%, #FFFFFF 40%, #C8E4F8 60%, #8DAEC8 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s ease-out forwards;
+}
