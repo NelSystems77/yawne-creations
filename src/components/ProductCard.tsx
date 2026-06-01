@@ -19,6 +19,9 @@ export default function ProductCard({ product }: Props) {
   const waMessage = encodeURIComponent(
     `Hola! Me interesa el producto: ${product.name}. ¿Está disponible?`
   );
+  const waPriceMessage = encodeURIComponent(
+    `Hola! Me gustaría saber el precio del producto: ${product.name}. ¿Me podrías indicar?`
+  );
 
   return (
     <article className="card flex flex-col overflow-hidden group">
@@ -100,7 +103,14 @@ export default function ProductCard({ product }: Props) {
               ₡{product.price.toLocaleString("es-CR")}
             </span>
           ) : (
-            <span className="text-silver-500 text-sm italic">Consultar precio</span>
+            <a
+              href={`https://wa.me/50683278331?text=${waPriceMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ice-blue text-sm italic hover:text-silver-300 transition-colors underline underline-offset-2"
+            >
+              Consultar precio
+            </a>
           )}
 
           {product.available && (
