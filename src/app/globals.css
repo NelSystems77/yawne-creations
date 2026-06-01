@@ -35,6 +35,11 @@
            active:scale-95 inline-flex items-center gap-2;
     box-shadow: 0 0 20px rgba(200, 222, 255, 0.2);
   }
+  .btn-secondary {
+    @apply border border-silver-400 text-silver-300 font-semibold px-6 py-3 rounded-lg
+           hover:bg-navy-800 hover:border-silver-200 transition-all duration-200
+           active:scale-95 inline-flex items-center gap-2;
+  }
   .btn-outline {
     @apply border border-silver-400 text-silver-300 px-6 py-3 rounded-lg
            hover:bg-navy-800 hover:border-silver-300 transition-all duration-200

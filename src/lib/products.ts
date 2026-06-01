@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  getDoc,
   query,
   orderBy,
   serverTimestamp,
@@ -17,6 +18,12 @@ import {
 } from "firebase/storage";
 import { db, storage } from "./firebase";
 import { Product } from "@/types";
+
+export async function getProduct(id: string): Promise<Product | null> {
+  const snap = await getDoc(doc(db, "products", id));
+  if (!snap.exists()) return null;
+  return { id: snap.id, ...snap.data() } as Product;
+}
 
 export async function getProducts(): Promise<Product[]> {
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));

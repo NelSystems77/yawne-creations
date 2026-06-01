@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { MessageCircle, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Product } from "@/types";
 
 interface Props {
@@ -13,8 +14,21 @@ export default function ProductCard({ product }: Props) {
   const [imgIdx, setImgIdx] = useState(0);
   const hasMany = product.images.length > 1;
 
-  const prev = () => setImgIdx((i) => (i - 1 + product.images.length) % product.images.length);
-  const next = () => setImgIdx((i) => (i + 1) % product.images.length);
+  const prev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIdx((i) => (i - 1 + product.images.length) % product.images.length);
+  };
+  const next = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIdx((i) => (i + 1) % product.images.length);
+  };
+  const goTo = (i: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIdx(i);
+  };
 
   const waMessage = encodeURIComponent(
     `Hola! Me interesa el producto: ${product.name}. ¿Está disponible?`
@@ -25,8 +39,8 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="card flex flex-col overflow-hidden group">
-      {/* Image carousel */}
-      <div className="relative aspect-square bg-navy-950 overflow-hidden">
+      {/* Image carousel — clicking navigates to detail */}
+      <Link href={`/producto/${product.id}`} className="block relative aspect-square bg-navy-950 overflow-hidden">
         {product.images.length > 0 ? (
           <Image
             src={product.images[imgIdx]}
@@ -41,26 +55,32 @@ export default function ProductCard({ product }: Props) {
           </div>
         )}
 
+        {/* Hover overlay hint */}
+        <div className="absolute inset-0 bg-navy-950/0 group-hover:bg-navy-950/30 transition-all duration-300 flex items-center justify-center">
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-navy-900/90 text-silver-200 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5">
+            <Eye size={13} /> Ver detalles
+          </span>
+        </div>
+
         {hasMany && (
           <>
             <button
               onClick={prev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-navy-900/80 text-silver-300 rounded-full p-1 hover:bg-navy-800 transition-colors"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-navy-900/80 text-silver-300 rounded-full p-1 hover:bg-navy-800 transition-colors z-10"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={next}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-navy-900/80 text-silver-300 rounded-full p-1 hover:bg-navy-800 transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-navy-900/80 text-silver-300 rounded-full p-1 hover:bg-navy-800 transition-colors z-10"
             >
               <ChevronRight size={18} />
             </button>
-            {/* Dots */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
               {product.images.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setImgIdx(i)}
+                  onClick={(e) => goTo(i, e)}
                   className={`w-1.5 h-1.5 rounded-full transition-colors ${
                     i === imgIdx ? "bg-silver-300" : "bg-silver-500/50"
                   }`}
@@ -70,34 +90,34 @@ export default function ProductCard({ product }: Props) {
           </>
         )}
 
-        {/* Featured badge */}
         {product.featured && (
-          <span className="absolute top-3 left-3 bg-silver-300/90 text-navy-900 text-xs font-semibold px-2 py-1 rounded-full">
+          <span className="absolute top-3 left-3 bg-silver-300/90 text-navy-900 text-xs font-semibold px-2 py-1 rounded-full z-10">
             Destacado
           </span>
         )}
 
-        {/* Unavailable overlay */}
         {!product.available && (
-          <div className="absolute inset-0 bg-navy-900/70 flex items-center justify-center">
+          <div className="absolute inset-0 bg-navy-900/70 flex items-center justify-center z-10">
             <span className="text-silver-400 font-semibold text-sm border border-silver-500 px-3 py-1 rounded-full">
               No disponible
             </span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="flex flex-col gap-3 p-5 flex-1">
         {product.category && (
           <span className="text-silver-500 text-xs uppercase tracking-widest">{product.category}</span>
         )}
-        <h3 className="font-display text-silver-100 text-lg leading-snug">{product.name}</h3>
+        <Link href={`/producto/${product.id}`} className="hover:text-silver-300 transition-colors">
+          <h3 className="font-display text-silver-100 text-lg leading-snug">{product.name}</h3>
+        </Link>
         {product.description && (
           <p className="text-silver-400 text-sm leading-relaxed line-clamp-3">{product.description}</p>
         )}
 
-        <div className="mt-auto pt-4 flex items-center justify-between">
+        <div className="mt-auto pt-4 flex items-center justify-between gap-2">
           {product.price != null ? (
             <span className="text-silver-300 font-semibold text-lg">
               ₡{product.price.toLocaleString("es-CR")}
