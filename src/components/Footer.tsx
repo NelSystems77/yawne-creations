@@ -56,8 +56,9 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-navy-700 px-4 py-6 text-center text-silver-500 text-xs">
-        © {new Date().getFullYear()} Yawne Creations · Hecho con amor por Mari Fer · Tres Ríos, Costa Rica
+      <div className="border-t border-navy-700 px-4 py-6 text-center text-silver-500 text-xs flex flex-col gap-1">
+        <span>© {new Date().getFullYear()} Yawne Creations · Todos los derechos reservados · Tres Ríos, Costa Rica</span>
+        <span>Desarrollado por <span className="text-silver-400">NelSystems</span></span>
       </div>
     </footer>
   );
