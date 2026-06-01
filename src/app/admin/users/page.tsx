@@ -99,7 +99,7 @@ export default function UsersAdminPage() {
     <div className="min-h-screen bg-navy-900 flex">
       <AdminSidebar />
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 pt-14 px-4 pb-6 sm:px-6 lg:p-8 lg:pt-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
